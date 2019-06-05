@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+    <title>CLP IDE</title>
+    <link rel="stylesheet" href="demo/kitchen-sink/styles.css" type="text/css" media="screen" charset="utf-8">
+<script src="new.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+$("#compile").click(function(){
+	localStorage.savedValue = editor.getValue(); 
+        editor.session.getUndoManager().markClean();  
+        const v = document.getElementById('hiddenInput');
+        v.value =localStorage.savedValue;  
+       const mode = document.getElementById('hiddenInp');
+      var Input=document.getElementById('tex');
+//alert(mode.value+v.value+Input.value);
+$("#te").empty().append("  Processing........");
+			$.post("http://127.0.0.1:8080/my/myaction",{va:v.value,vartik:mode.value,Inp:Input.value},function(data,status,xhr) {
+                             console.log("output");
+                                //alert("output"+data.name);
+				$("#te").empty().append(data.name);
+				}).fail(function(jqxhr, settings, ex){ alert("error"+ex);
+                        $("#te").empty().append(data.name);});
+			});
+});
+
+</script>
+</head>
+<body>
+<input type="hidden" name="va" id="hiddenInput" />
+<input type="hidden" name="vartik" id="hiddenInp" />
+<div id="optionsPanel" style="width: 25%; height:100%; overflow:scroll;">
+</div>
+<div id="editor-container">
+</div>
+<h2 id="h">Output:</h2>
+<pre name = "description" id="te"><code>Output...</code></pre>
+<h2 id="h1">Input:</h2>
+<textarea rows = "5" cols = "40"  name = "descript" id="tex">
+         </textarea>
+
+<script src="src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+  <script src="src/keybinding-emacs.js"></script>
+  <script src="demo/kitchen-sink/demo.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    require("kitchen-sink/demo");
+  </script>
+<input type="submit" value="Run" id="compile"/>
+
+</body>
+</html>
